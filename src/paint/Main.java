@@ -7,7 +7,7 @@ public class Main {
         MainFrame f = new MainFrame();
         //f.setUndecorated(true);
         f.setLocation(800, 300);
-        f.setSize(400, 400);
+        f.setSize(600, 400);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setTitle("Computergrafik - Paint");
         f.setVisible(true);
