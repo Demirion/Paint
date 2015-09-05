@@ -11,6 +11,7 @@ public class PaintPanel extends JPanel {
     private int mode;
     private Color drawColor, fillColor;
     private boolean fillMode;
+    private boolean bContour;
     static ArrayList<GraphObject> list = new ArrayList<GraphObject>();
     Point point = null;
     Line line = null;
@@ -61,7 +62,8 @@ public class PaintPanel extends JPanel {
                 fillMode = false;
                 rect2 = new Rect(e.getX(), e.getY(), e.getX(), e.getY(), drawColor, fillMode);
                 fillMode = true;
-            } else rect = new Rect(e.getX(), e.getY(), e.getX(), e.getY(), drawColor, fillMode);
+            } else
+                rect = new Rect(e.getX(), e.getY(), e.getX(), e.getY(), drawColor, fillMode);
         }
 
         if (MainFrame.circ.isSelected()) {
@@ -70,9 +72,10 @@ public class PaintPanel extends JPanel {
                 fillMode = false;
                 circ2 = new Circ(e.getX(), e.getY(), e.getX(), e.getY(), drawColor, fillMode);
                 fillMode = true;
-            } else circ = new Circ(e.getX(), e.getY(), e.getX(), e.getY(), drawColor, fillMode);
+            } else
+                circ = new Circ(e.getX(), e.getY(), e.getX(), e.getY(), drawColor, fillMode);
         }
-        repaint();
+        //repaint();
     }
 
     protected void mdragged(MouseEvent arg0) {
@@ -100,9 +103,9 @@ public class PaintPanel extends JPanel {
             } else
                 circ.setP2(arg0.getX(), arg0.getY());
         }
+        bContour = true;
         repaint();
     }
-
 
     protected void mreleased(MouseEvent e) {
 
@@ -152,8 +155,8 @@ public class PaintPanel extends JPanel {
             }
             MainFrame.tmp = 0;
         }
+        bContour = false;
         repaint();
-
     }
 
     public void paintComponent(Graphics g) {
@@ -164,30 +167,30 @@ public class PaintPanel extends JPanel {
 
         if (MainFrame.point.isSelected()) {
             if (point != null)
-                point.paint(g2d, true);
+                point.paint(g2d, bContour);
         }
 
         if (MainFrame.line.isSelected()) {
             if (line != null)
-                line.paint(g2d, true);
+                line.paint(g2d, bContour);
         }
 
         if (MainFrame.rect.isSelected()) {
             if (rect != null)
                 if (fillMode == true) {
-                    rect.paint(g2d, true);
-                    rect2.paint(g2d, true);
+                    rect.paint(g2d, bContour);
+                    rect2.paint(g2d, bContour);
                 } else
-                    rect.paint(g2d, true);
+                    rect.paint(g2d, bContour);
         }
 
         if (MainFrame.circ.isSelected()) {
             if (circ != null)
                 if (fillMode == true) {
-                    circ.paint(g2d, true);
-                    circ2.paint(g2d, true);
+                    circ.paint(g2d, bContour);
+                    circ2.paint(g2d, bContour);
                 } else
-                    circ.paint(g2d, true);
+                    circ.paint(g2d, bContour);
         }
     }
 }
