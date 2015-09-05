@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_paint" default="compile.module.paint">
+  <dirname property="module.paint.basedir" file="${ant.file.module_paint}"/>
+  
+  <property name="module.jdk.home.paint" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.paint" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.paint" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.paint" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="paint.output.dir" value="${module.paint.basedir}/out/production/Paint"/>
+  <property name="paint.testoutput.dir" value="${module.paint.basedir}/out/test/Paint"/>
+  
+  <path id="paint.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="paint.module.production.classpath">
+    <path refid="${module.jdk.classpath.paint}"/>
+  </path>
+  
+  <path id="paint.runtime.production.module.classpath">
+    <pathelement location="${paint.output.dir}"/>
+  </path>
+  
+  <path id="paint.module.classpath">
+    <path refid="${module.jdk.classpath.paint}"/>
+    <pathelement location="${paint.output.dir}"/>
+  </path>
+  
+  <path id="paint.runtime.module.classpath">
+    <pathelement location="${paint.testoutput.dir}"/>
+    <pathelement location="${paint.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.paint">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.paint">
+    <patternset refid="excluded.from.module.paint"/>
+  </patternset>
+  
+  <path id="paint.module.sourcepath">
+    <dirset dir="${module.paint.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.paint" depends="compile.module.paint.production,compile.module.paint.tests" description="Compile module Paint"/>
+  
+  <target name="compile.module.paint.production" depends="register.custom.compilers" description="Compile module Paint; production classes">
+    <mkdir dir="${paint.output.dir}"/>
+    <javac2 destdir="${paint.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.paint}/javac">
+      <compilerarg line="${compiler.args.paint}"/>
+      <bootclasspath refid="paint.module.bootclasspath"/>
+      <classpath refid="paint.module.production.classpath"/>
+      <src refid="paint.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.paint"/>
+    </javac2>
+    
+    <copy todir="${paint.output.dir}">
+      <fileset dir="${module.paint.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.paint.tests" depends="register.custom.compilers,compile.module.paint.production" description="compile module Paint; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.paint" description="cleanup module">
+    <delete dir="${paint.output.dir}"/>
+    <delete dir="${paint.testoutput.dir}"/>
+  </target>
+</project>
